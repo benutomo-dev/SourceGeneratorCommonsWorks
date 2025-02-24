@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35806.99
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SourceGeneratorCommons", "SourceGeneratorCommons\SourceGeneratorCommons.shproj", "{B387FC44-DFAF-4D1C-B8FF-5E8C5F0BB990}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourceGenerator_4_3_1", "SourceGenerator_4_3_1\SourceGenerator_4_3_1.csproj", "{7A0A4821-AAB9-40CE-A2BC-EC0365044247}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ソリューション項目", "ソリューション項目", "{2022CB0F-8BAF-F49E-0C48-8EF4C96EC109}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		Directory.build.props = Directory.build.props
+		Directory.build.props.user = Directory.build.props.user
+		Directory.build.targets = Directory.build.targets
+		Directory.build.targets.user = Directory.build.targets.user
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SourceGenerator", "SourceGenerator\SourceGenerator.shproj", "{D71ADAB7-B1B7-4963-88E0-5134A06817EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SandBox", "SandBox\SandBox.csproj", "{A0CEA58C-BE73-4768-A250-BA6E4FADAFA6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7A0A4821-AAB9-40CE-A2BC-EC0365044247}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A0A4821-AAB9-40CE-A2BC-EC0365044247}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A0A4821-AAB9-40CE-A2BC-EC0365044247}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A0A4821-AAB9-40CE-A2BC-EC0365044247}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0CEA58C-BE73-4768-A250-BA6E4FADAFA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0CEA58C-BE73-4768-A250-BA6E4FADAFA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0CEA58C-BE73-4768-A250-BA6E4FADAFA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0CEA58C-BE73-4768-A250-BA6E4FADAFA6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {41A96307-8139-44AA-B391-436411AE6AF6}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		SourceGeneratorCommons\SourceGeneratorCommons.projitems*{7a0a4821-aab9-40ce-a2bc-ec0365044247}*SharedItemsImports = 5
+		SourceGenerator\SourceGenerator.projitems*{7a0a4821-aab9-40ce-a2bc-ec0365044247}*SharedItemsImports = 5
+		SourceGeneratorCommons\SourceGeneratorCommons.projitems*{b387fc44-dfaf-4d1c-b8ff-5e8c5f0bb990}*SharedItemsImports = 13
+		SourceGenerator\SourceGenerator.projitems*{d71adab7-b1b7-4963-88e0-5134a06817ea}*SharedItemsImports = 13
+	EndGlobalSection
+EndGlobal
