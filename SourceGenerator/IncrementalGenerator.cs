@@ -49,7 +49,6 @@ public class IncrementalGenerator : IIncrementalGenerator
 
             using (builder.BeginTypeDefinitionBlock(source, $" // This is source generated code."))
             {
-
             }
                 
             builder.Commit();
