@@ -30,7 +30,7 @@ public class IncrementalGenerator : IIncrementalGenerator
 
             var typeSymbol = (ITypeSymbol?)context.SemanticModel.GetDeclaredSymbol(typeDeclarationSyntax, cancellationToken);
 
-            return typeSymbol?.BuildTypeDefinitionInfo();
+            return typeSymbol?.BuildTypeDefinitionInfo().DefinitionInfo;
         }
 
         var source = context.SyntaxProvider
