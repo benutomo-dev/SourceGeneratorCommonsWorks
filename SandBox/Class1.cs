@@ -54,6 +54,24 @@ partial class OuterA
         //}
 
         public partial T MethodB<T>() where T : OuterA, IEnumerable<T>;
+
+        public int X()
+        {
+            Enum64 x;
+            return 0;
+        }
+    }
+
+}
+class OuterB : IEquatable<OuterB.X>
+{
+    bool IEquatable<X>.Equals(X? other)
+    {
+        throw new NotImplementedException();
+    }
+
+    class X
+    {
+
     }
 }
-class OuterB { }
