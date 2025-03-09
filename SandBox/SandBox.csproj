@@ -5,16 +5,18 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
-    <!--<OutputType>Exe</OutputType>-->
+    <OutputType>Exe</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
-    <!--<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.13.0" />-->
-    <!--<PackageReference Include="Polyfill" Version="7.18.0" PrivateAssets="all" />-->
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.3.1" />
   </ItemGroup>
-
+  
   <ItemGroup>
-    <ProjectReference Include="..\SourceGenerator.4.3.1\SourceGenerator.4.3.1.csproj"  OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\SandBoxLib1\SandBoxLib1.csproj" />
+    
+    <!--<ProjectReference Include="..\SourceGenerator.4.3.1\SourceGenerator.4.3.1.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />-->
+    <ProjectReference Include="..\SourceGenerator.4.3.1\SourceGenerator.4.3.1.csproj" />
   </ItemGroup>
 
 </Project>

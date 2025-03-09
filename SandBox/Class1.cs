@@ -1,77 +1,35 @@
-﻿//using Microsoft.CodeAnalysis;
-//using Microsoft.CodeAnalysis.CSharp;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using SourceGenerator;
 
-//CSharpParseOptions parseOptions = new CSharpParseOptions(LanguageVersion.Latest);
+CSharpParseOptions parseOptions = new CSharpParseOptions(LanguageVersion.Latest);
 
-//var syntaxTree = CSharpSyntaxTree.ParseText("""
+var syntaxTree1 = CSharpSyntaxTree.ParseText("""
+    public partial class A {}
+    """, parseOptions);
 
-//    """, parseOptions);
+var refs = AppDomain.CurrentDomain
+    .GetAssemblies()
+    .Where(v => !v.IsDynamic)
+    .Where(v => v.Location.Contains("Microsoft.NETCore.App"))
+    .Where(v => File.Exists(v.Location))
+    .Select(v => MetadataReference.CreateFromFile(v.Location));
 
-//var refs = AppDomain.CurrentDomain
-//    .GetAssemblies()
-//    .Where(v => !v.IsDynamic)
-//    .Where(v => v.Location.Contains("Microsoft.NETCore.App"))
-//    .Where(v => File.Exists(v.Location))
-//    .Select(v => MetadataReference.CreateFromFile(v.Location));
+var compilation1 = CSharpCompilation.Create("SGTests", [syntaxTree1], refs, new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, nullableContextOptions: NullableContextOptions.Enable));
 
-//var compilation = CSharpCompilation.Create("SGTests", [syntaxTree], refs, new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, nullableContextOptions: NullableContextOptions.Enable));
+var driver1 = CSharpGeneratorDriver.Create(new IncrementalGenerator());
 
-//var sematicModel = compilation.GetSemanticModel(syntaxTree, true);
+CancellationTokenSource cts = new CancellationTokenSource();
 
-//var objectType = compilation.GetSpecialType(SpecialType.System_Object);
-//var enumerableType = (INamedTypeSymbol)compilation.GetTypeByMetadataName(@"System.Collections.Generic.IEnumerable`1")!;
+var driver2 = driver1.RunGeneratorsAndUpdateCompilation(compilation1, out var outputCompilation1, out _, cts.Token);
 
-//var enumerableType2 = enumerableType.Construct(objectType);
+var syntaxTree2 = CSharpSyntaxTree.ParseText("""
+    public partial class B {}
+    """, parseOptions);
 
-//var enumerableType3 = enumerableType.ConstructUnboundGenericType();
-//;
+var compilation2 = compilation1.AddSyntaxTrees(syntaxTree2);
 
-namespace X;
+var driver3 = driver2.RunGeneratorsAndUpdateCompilation(compilation2, out var outputCompilation2, out _);
 
-partial class OuterA
-{
-    readonly ref partial struct InnerB
-    {
-        //readonly ref int _a;
 
-        //public readonly ref readonly int MethodA()
-        //{
-        //    return ref _a;
-        //}
-
-        //public readonly partial int MethodB();
-
-        //public readonly partial int? MethodC();
-    }
-
-    ref partial struct InnerC
-    {
-        //ref int _a;
-
-        //public ref int MethodA()
-        //{
-        //    return ref _a;
-        //}
-
-        public partial T MethodB<T>() where T : OuterA, IEnumerable<T>;
-
-        public int X()
-        {
-            Enum64 x;
-            return 0;
-        }
-    }
-
-}
-class OuterB : IEquatable<OuterB.X>
-{
-    bool IEquatable<X>.Equals(X? other)
-    {
-        throw new NotImplementedException();
-    }
-
-    class X
-    {
-
-    }
-}
+;

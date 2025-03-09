@@ -1,6 +1,8 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SourceGeneratorCommons;
+using SourceGeneratorCommons.Collections.Generic;
+using SourceGeneratorCommons.CSharpDeclarations;
 using System.Collections.Immutable;
 
 namespace SourceGenerator;
@@ -14,16 +16,16 @@ public class IncrementalGenerator : IIncrementalGenerator
         {
             using var sourceBuilder = new SourceBuilder(context, "PostInitializationOutput.cs");
 
-            var attributeTypeDefinition = new CsClassDeclaration(
-                new NameSpaceInfo("System"),
+            var attributeTypeDefinition = new CsClass(
+                new CsNameSpace("System"),
                 "Attribute",
-                classModifier: ClassModifier.Sealed
+                classModifier: CsClassModifier.Sealed
             );
 
             var attributeTypeReference = new CsTypeReference(attributeTypeDefinition, false);
 
-            var sampleTypeDefinition = new CsClassDeclaration(
-                new NameSpaceInfo("SrcGen"),
+            var sampleTypeDefinition = new CsClass(
+                new CsNameSpace("SrcGen"),
                 "SourceGenAttribute",
                 baseType: attributeTypeReference,
                 accessibility: CsAccessibility.Internal
@@ -35,11 +37,11 @@ public class IncrementalGenerator : IIncrementalGenerator
             }
 
 
-            var enumTypeDefinition = new CsEnumDeclaration(
-                new NameSpaceInfo("System"),
+            var enumTypeDefinition = new CsEnum(
+                new CsNameSpace("System"),
                 "Enum64",
                 CsAccessibility.Internal,
-                EnumUnderlyingType.UInt64);
+                CsEnumUnderlyingType.UInt64);
 
             using (sourceBuilder.BeginTypeDefinitionBlock(enumTypeDefinition))
             {
@@ -66,6 +68,8 @@ public class IncrementalGenerator : IIncrementalGenerator
             return typeSymbol;
         }
 
+        var csDeclarationProvider = context.CreateCsDeclarationProvider();
+
         var source = context.SyntaxProvider
             .CreateSyntaxProvider(predicate, transform)
             .Collect()
@@ -76,7 +80,7 @@ public class IncrementalGenerator : IIncrementalGenerator
                     .Select(v => v!)
                     .Distinct<INamedTypeSymbol>(SymbolEqualityComparer.Default);
             })
-            .Combine(context.CompilationProvider.Select((v, cancellationToken) => new CsDeclarationProvider()))
+            .Combine(csDeclarationProvider)
             .Select((v, cancellationToken) =>
             {
                 var (typeSymbol, context) = v;
@@ -85,7 +89,7 @@ public class IncrementalGenerator : IIncrementalGenerator
                 var methodDefinitions = typeSymbol.GetMembers()
                     .OfType<IMethodSymbol>()
                     .Where(v => v.IsPartialDefinition)
-                    .Select(v => context.GetMethodDeclaration(v, cancellationToken))
+                    .Select(context.GetMethodDeclaration)
                     .ToImmutableArray()
                     .ToEquatableArray();
 

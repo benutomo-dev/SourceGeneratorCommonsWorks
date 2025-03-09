@@ -1,4 +1,6 @@
-﻿namespace SourceGeneratorCommons.Tests;
+﻿using SourceGeneratorCommons.CSharpDeclarations;
+
+namespace SourceGeneratorCommons.Tests;
 
 public class BuildTypeDefinitionInfoTests
 {
@@ -11,10 +13,17 @@ public class BuildTypeDefinitionInfoTests
 
         Assert.NotNull(openGenericEnumerableTypeSymbol);
 
-        var sourceGenerationContext = new CsDeclarationProvider();
+        var classA = new CsClass(
+            new CsNameSpace("My.Name"),
+            "MyClass",
+            accessibility: CsAccessibility.Public,
+            classModifier: CsClassModifier.Default
+            );
+
+        var csDeclarationProvider = new CsDeclarationProvider(CancellationToken.None);
 
         {
-            var typeReference = sourceGenerationContext.GetTypeReference(openGenericEnumerableTypeSymbol);
+            var typeReference = csDeclarationProvider.GetTypeReference(openGenericEnumerableTypeSymbol);
 
             //Assert.Null(definitionWithReference.ReferenceInfo);
 
@@ -37,7 +46,7 @@ public class BuildTypeDefinitionInfoTests
             .WithNullableAnnotation(Microsoft.CodeAnalysis.NullableAnnotation.Annotated);
 
         {
-            var typeReference = sourceGenerationContext.GetTypeReference(nullableLazyIntGenericEnumerableTypeSymbol);
+            var typeReference = csDeclarationProvider.GetTypeReference(nullableLazyIntGenericEnumerableTypeSymbol);
 
             Assert.Equal("IEnumerable", typeReference.TypeDefinition.Name);
             Assert.Equal("global::System.Collections.Generic.IEnumerable<T>", typeReference.TypeDefinition.FullName);
