@@ -41,6 +41,8 @@
 
     <AnalysisMode>Recommended</AnalysisMode>
     <!--<AnalysisMode>All</AnalysisMode>-->
+
+    <DefineConstants>$(DefineConstants);ENABLE_SOURCE_GENERATOR_COMMONS_WARNING</DefineConstants>
   </PropertyGroup>
 
 </Project>

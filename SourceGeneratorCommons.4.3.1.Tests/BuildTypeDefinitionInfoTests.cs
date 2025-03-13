@@ -1,4 +1,4 @@
-﻿using SourceGeneratorCommons.CSharpDeclarations;
+﻿using SourceGeneratorCommons.CSharp.Declarations;
 
 namespace SourceGeneratorCommons.Tests;
 
@@ -20,15 +20,15 @@ public class BuildTypeDefinitionInfoTests
             classModifier: CsClassModifier.Default
             );
 
-        var csDeclarationProvider = new CsDeclarationProvider(CancellationToken.None);
+        var csDeclarationProvider = new CsDeclarationProvider(compilation, CancellationToken.None);
 
         {
             var typeReference = csDeclarationProvider.GetTypeReference(openGenericEnumerableTypeSymbol);
 
             //Assert.Null(definitionWithReference.ReferenceInfo);
 
-            Assert.Equal("IEnumerable", typeReference.TypeDefinition.Name);
-            Assert.Equal("global::System.Collections.Generic.IEnumerable<T>", typeReference.TypeDefinition.FullName);
+            Assert.Equal("IEnumerable", typeReference.Type.TypeDefinition.Name);
+            Assert.Equal("global::System.Collections.Generic.IEnumerable<T>", typeReference.Type.TypeDefinition.FullName);
         }
 
         var intTypeSymbol = compilation.GetSpecialType(Microsoft.CodeAnalysis.SpecialType.System_Int32);
@@ -48,26 +48,28 @@ public class BuildTypeDefinitionInfoTests
         {
             var typeReference = csDeclarationProvider.GetTypeReference(nullableLazyIntGenericEnumerableTypeSymbol);
 
-            Assert.Equal("IEnumerable", typeReference.TypeDefinition.Name);
-            Assert.Equal("global::System.Collections.Generic.IEnumerable<T>", typeReference.TypeDefinition.FullName);
+            Assert.Equal("IEnumerable", typeReference.Type.TypeDefinition.Name);
+            Assert.Equal("global::System.Collections.Generic.IEnumerable<T>", typeReference.Type.TypeDefinition.FullName);
 
-            Assert.Equal("global::System.Collections.Generic.IEnumerable<global::System.Lazy<int>?>?", typeReference.ToString());
-            Assert.True(typeReference.IsNullableAnnotated);
-            Assert.Single(typeReference.TypeArgs.Values);
-            Assert.Single(typeReference.TypeArgs[0].Values);
+            Assert.Equal("global::System.Collections.Generic.IEnumerable<global::System.Lazy<int>?>?", typeReference.GlobalReference);
+            Assert.Equal("IEnumerable<global::System.Lazy<int>?>?", typeReference.InternalReference);
+            Assert.Equal("System.Collections.Generic.IEnumerable{System.Lazy{int}}", typeReference.Cref);
+            Assert.True(typeReference.IsNullable);
+            Assert.Single(typeReference.Type.TypeArgs.Values);
+            Assert.Single(typeReference.Type.TypeArgs[0].Values);
 
-            var lazyReference = typeReference.TypeArgs[0][0];
+            var lazyReference = typeReference.Type.TypeArgs[0][0];
 
-            Assert.Equal("Lazy", lazyReference.TypeDefinition.Name);
-            Assert.True(lazyReference.IsNullableAnnotated);
-            Assert.Single(lazyReference.TypeArgs.Values);
-            Assert.Single(lazyReference.TypeArgs[0].Values);
+            Assert.Equal("Lazy", lazyReference.Type.TypeDefinition.Name);
+            Assert.True(lazyReference.IsNullable);
+            Assert.Single(lazyReference.Type.TypeArgs.Values);
+            Assert.Single(lazyReference.Type.TypeArgs[0].Values);
 
-            var intReference = lazyReference.TypeArgs[0][0];
+            var intReference = lazyReference.Type.TypeArgs[0][0];
 
-            Assert.Equal("Int32", intReference.TypeDefinition.Name);
-            Assert.False(intReference.IsNullableAnnotated);
-            Assert.Empty(intReference.TypeArgs.Values);
+            Assert.Equal("Int32", intReference.Type.TypeDefinition.Name);
+            Assert.False(intReference.IsNullable);
+            Assert.Empty(intReference.Type.TypeArgs.Values);
 
         }
     }

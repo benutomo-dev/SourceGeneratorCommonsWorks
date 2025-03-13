@@ -9,7 +9,7 @@ public class Class1
 
 partial class OuterA
 {
-    readonly ref partial struct InnerB
+    readonly ref partial struct InnerB : Xxxx
     {
         //readonly ref int _a;
 
