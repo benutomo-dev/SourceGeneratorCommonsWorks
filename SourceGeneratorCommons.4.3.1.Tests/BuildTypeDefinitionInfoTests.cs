@@ -28,7 +28,7 @@ public class BuildTypeDefinitionInfoTests
             //Assert.Null(definitionWithReference.ReferenceInfo);
 
             Assert.Equal("IEnumerable", typeReference.Type.TypeDefinition.Name);
-            Assert.Equal("global::System.Collections.Generic.IEnumerable<T>", typeReference.Type.TypeDefinition.FullName);
+            Assert.Equal("global::System.Collections.Generic.IEnumerable<T>", typeReference.Type.TypeDefinition.FullNameWithNameSpaceAlias);
         }
 
         var intTypeSymbol = compilation.GetSpecialType(Microsoft.CodeAnalysis.SpecialType.System_Int32);
@@ -49,7 +49,7 @@ public class BuildTypeDefinitionInfoTests
             var typeReference = csDeclarationProvider.GetTypeReference(nullableLazyIntGenericEnumerableTypeSymbol);
 
             Assert.Equal("IEnumerable", typeReference.Type.TypeDefinition.Name);
-            Assert.Equal("global::System.Collections.Generic.IEnumerable<T>", typeReference.Type.TypeDefinition.FullName);
+            Assert.Equal("global::System.Collections.Generic.IEnumerable<T>", typeReference.Type.TypeDefinition.FullNameWithNameSpaceAlias);
 
             Assert.Equal("global::System.Collections.Generic.IEnumerable<global::System.Lazy<int>?>?", typeReference.GlobalReference);
             Assert.Equal("IEnumerable<global::System.Lazy<int>?>?", typeReference.InternalReference);

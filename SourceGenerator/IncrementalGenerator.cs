@@ -66,7 +66,7 @@ public class IncrementalGenerator : IIncrementalGenerator
         {
             var typeDeclarationSyntax = (TypeDeclarationSyntax)context.Node;
 
-            var typeSymbol = (INamedTypeSymbol?)context.SemanticModel.GetDeclaredSymbol(typeDeclarationSyntax, cancellationToken);
+            var typeSymbol = context.SemanticModel.GetDeclaredSymbol(typeDeclarationSyntax, cancellationToken);
 
             return typeSymbol;
         }
@@ -114,7 +114,7 @@ public class IncrementalGenerator : IIncrementalGenerator
             {
                 foreach (var methodDefinitionInfo in source.methodDefinitions.Values)
                 {
-                    using (builder.BeginMethodDefinitionBlock(methodDefinitionInfo, $" // This is source generated method."))
+                    using (builder.BeginMethodDefinitionBlock(methodDefinitionInfo, methodDeclarationLineTail: $" // This is source generated method."))
                     {
                         if (!methodDefinitionInfo.IsVoidMethod)
                         {

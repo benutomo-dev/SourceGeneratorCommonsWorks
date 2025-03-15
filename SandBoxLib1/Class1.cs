@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SandBoxLib1;
+﻿namespace SandBoxLib1;
 
 public class Class1
 {
@@ -9,7 +7,7 @@ public class Class1
 
 partial class OuterA
 {
-    readonly ref partial struct InnerB : Xxxx
+    readonly ref partial struct InnerB
     {
         //readonly ref int _a;
 

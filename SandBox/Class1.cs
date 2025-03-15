@@ -5,11 +5,19 @@ using SourceGenerator;
 CSharpParseOptions parseOptions = new CSharpParseOptions(LanguageVersion.Latest);
 
 var syntaxTreeA = CSharpSyntaxTree.ParseText("""
-    public partial class A : UnknownXxx {}
+    public partial class A : B {}
     """, parseOptions);
 
 var syntaxTreeB = CSharpSyntaxTree.ParseText("""
     public partial class B : System.Collections.Generic.IEnumerable<System.Guid> {}
+    """, parseOptions);
+
+var syntaxTreeC = CSharpSyntaxTree.ParseText("""
+    public partial class C {}
+    """, parseOptions);
+
+var syntaxTreeD = CSharpSyntaxTree.ParseText("""
+    public partial class D {}
     """, parseOptions);
 
 var refs = AppDomain.CurrentDomain
@@ -19,7 +27,7 @@ var refs = AppDomain.CurrentDomain
     .Where(v => File.Exists(v.Location))
     .Select(v => MetadataReference.CreateFromFile(v.Location));
 
-var compilation1 = CSharpCompilation.Create("SGTests", [syntaxTreeA, syntaxTreeB], refs, new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, nullableContextOptions: NullableContextOptions.Enable));
+var compilation1 = CSharpCompilation.Create("SGTests", [syntaxTreeA, syntaxTreeB, syntaxTreeC, syntaxTreeD], refs, new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, nullableContextOptions: NullableContextOptions.Enable));
 
 var incremental = new IncrementalGenerator();
 
@@ -29,16 +37,17 @@ CancellationTokenSource cts = new CancellationTokenSource();
 
 var driver2 = driver1.RunGeneratorsAndUpdateCompilation(compilation1, out var outputCompilation1, out _, cts.Token);
 
-var syntaxTreeC = CSharpSyntaxTree.ParseText("""
-    public partial class C {}
+var syntaxTree_newB = CSharpSyntaxTree.ParseText("""
+    public partial class B : System.Collections.Generic.IEnumerable<int>{}
     """, parseOptions);
 
-var syntaxTree_newB = CSharpSyntaxTree.ParseText("""
-    public partial class B : System.Collections.Generic.IEnumerable<System.Guid> {}
+var syntaxTree_newC = CSharpSyntaxTree.ParseText("""
+    public partial class C : System.Collections.Generic.IEnumerable<int>{}
     """, parseOptions);
 
 var compilation2 = compilation1
-    .RemoveSyntaxTrees(syntaxTreeB);
+    .ReplaceSyntaxTree(syntaxTreeB, syntaxTree_newB)
+    .ReplaceSyntaxTree(syntaxTreeC, syntaxTree_newC);
 
 var driver3 = driver2.RunGeneratorsAndUpdateCompilation(compilation2, out var outputCompilation2, out _);
 
