@@ -35,8 +35,8 @@ partial class OuterA
             return 0;
         }
     }
-
 }
+
 class OuterB : IEquatable<OuterB.X>
 {
     bool IEquatable<X>.Equals(X? other)
