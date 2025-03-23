@@ -18,10 +18,11 @@
     <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="4.3.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
     <PackageReference Include="Polyfill" Version="7.21.0" PrivateAssets="all" />
-    <PackageReference Include="ShouldMethodAssertion" Version="1.6.1" />
+    <PackageReference Include="ShouldMethodAssertion" Version="1.7.3" />
     <PackageReference Include="System.Interactive" Version="6.0.1" />
     <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
     <PackageReference Include="xunit" Version="2.5.3" />
+    <PackageReference Include="Xunit.Combinatorial" Version="1.6.24" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3" />
   </ItemGroup>
 

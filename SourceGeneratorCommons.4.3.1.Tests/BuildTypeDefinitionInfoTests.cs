@@ -69,7 +69,8 @@ public class BuildTypeDefinitionInfoTests
 
             Assert.Equal("Int32", intReference.Type.TypeDefinition.Name);
             Assert.False(intReference.IsNullable);
-            Assert.Empty(intReference.Type.TypeArgs.Values);
+            Assert.Single(intReference.Type.TypeArgs.Values);
+            Assert.Empty(intReference.Type.TypeArgs[0].Values);
 
         }
     }
