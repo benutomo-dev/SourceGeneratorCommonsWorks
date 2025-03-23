@@ -116,7 +116,7 @@ public class IncrementalGenerator : IIncrementalGenerator
                 {
                     using (builder.BeginMethodDefinitionBlock(methodDefinitionInfo, methodDeclarationLineTail: $" // This is source generated method."))
                     {
-                        if (!methodDefinitionInfo.IsVoidMethod)
+                        if (!methodDefinitionInfo.IsVoidLikeMethod)
                         {
                             builder.AppendLineWithFirstIndent("return default;");
                         }
