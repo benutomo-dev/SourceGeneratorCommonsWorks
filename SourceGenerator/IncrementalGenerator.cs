@@ -25,7 +25,7 @@ public class IncrementalGenerator : IIncrementalGenerator
                 classModifier: CsClassModifier.Sealed
             );
 
-            var attributeTypeReference = new CsTypeReference(attributeTypeDefinition);
+            var attributeTypeReference = new CsTypeRef(attributeTypeDefinition);
 
             var sampleTypeDefinition = new CsClass(
                 new CsNameSpace("SrcGen"),
