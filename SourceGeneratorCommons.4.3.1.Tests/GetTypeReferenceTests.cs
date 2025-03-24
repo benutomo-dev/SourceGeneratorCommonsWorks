@@ -106,24 +106,25 @@ public class GetTypeReferenceTests
             class Class<TypeArg1, TypeArg2>
                 where TypeArg1 : struct, global::System.IEquatable<TypeArg1>
             {
-                global::System.Collections.Generic.IEnumerable<TypeArg1> Method() => default!;
+                global::System.Collections.Generic.IDictionary<TypeArg1, TypeArg2?> Method() => default!;
             }
             """;
 
         var type = GetTypeReference(metadataName, methodName, source);
 
-        type.InternalReference.Should().Be("IEnumerable<TypeArg1>");
-        type.GlobalReference.Should().Be("global::System.Collections.Generic.IEnumerable<TypeArg1>");
-        type.Cref.Should().Be("System.Collections.Generic.IEnumerable{TypeArg1}");
+        type.InternalReference.Should().Be("IDictionary<TypeArg1,TypeArg2?>");
+        type.GlobalReference.Should().Be("global::System.Collections.Generic.IDictionary<TypeArg1,TypeArg2?>");
+        type.Cref.Should().Be("System.Collections.Generic.IDictionary{TypeArg1,TypeArg2}");
 
         type.IsNullable.Should().BeFalse();
 
         type.Type.TypeDefinition.Should().BeOfType<CsInterface>();
 
         type.Type.TypeArgs.Values.Length.Should().Be(1);
-        type.Type.TypeArgs.Values[0].Length.Should().Be(1);
+        type.Type.TypeArgs.Values[0].Length.Should().Be(2);
 
         var typeArg1 = type.Type.TypeArgs.Values[0][0].Type.TypeDefinition.Should().BeOfType<CsTypeParameterDeclaration>();
+        var typeArg2 = type.Type.TypeArgs.Values[0][1].Type.TypeDefinition.Should().BeOfType<CsTypeParameterDeclaration>();
 
         typeArg1.Name.Should().Be("TypeArg1");
         typeArg1.Where.IsAny.Should().BeFalse();
@@ -136,6 +137,9 @@ public class GetTypeReferenceTests
 
         var equatableInterfaceTypeArg1 = typeArg1.Where.Interfaces.Values[0].TypeArgs[0][0].Type.TypeDefinition.Should().BeOfType<CsTypeParameterDeclaration>();
         equatableInterfaceTypeArg1.Should().SameReferenceAs(typeArg1);
+
+        typeArg2.Name.Should().Be("TypeArg2");
+        typeArg2.Where.IsAny.Should().BeTrue();
     }
 
     private static CsTypeRefWithAnnotation GetTypeReference(string metadataName, string methodName, string source)
